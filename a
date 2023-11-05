@@ -1,358 +1,283 @@
-------- config 
-repeat wait() until game:IsLoaded() and game.Players and game.Players.LocalPlayer and game.Players.LocalPlayer.Character and game.Players:GetPlayers()
-getgenv().c = {
-    ["Team"]                      = "Pirates"
-  , ["Buso"]                      = 1
-  , ["Ken"]                       = 1 
-  , ["AlwaysDash"]                = 1
-  , ["V3"]                        = 1 
-  , ["V4"]                        = 1 
-  , ["MainItem"]                  = "Blox Fruit"
-  , ["MainClick"]                 = "Melee"
-  , ["MainItemSkillToggle"]       = {"Click", "Z", "X", "C", "V"}
-  , ["MainClickSkillToggle"]      = {"Click", "Z", "C"}
-  , ["Hop"]                       = 1
-  , ["SpamChat"]                  = {"aaaa"}
-  , ["Invisble"]                  = 0 
-  , ["Webhooks"]                  = 0 
-  , ["SafeMode"]                  = 1 
-  , ["SafeHealth"]                = 5000
-  , ["SafeUntil"]                 = 6000
-  , ["BypassTP"]                  = 1 
-  , ["BypassDist"]                = 5000
-  , ["YTween"]                    = 1 
-  , ["TweenSpeed"]                = 350
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+
+local Window = Fluent:CreateWindow({
+    Title = "Edward Newgate hub" ,
+    SubTitle = "by Edward Newgate",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
+})
+
+--Fluent provides Lucide Icons https://lucide.dev/icons/ for the tabs, icons are optional
+local Tabs = {
+    Main = Window:AddTab({ Title = "Main", Icon = "" }),
+    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
 }
 
+local Options = Fluent.Options
 
+do
+    Fluent:Notify({
+        Title = "thank use script",
+        Content = "This is a notification",
+        SubContent = "SubContent", -- Optional
+        Duration = 5 -- Set to nil to make the notification not disappear
+    })
 
+    Tabs.Main:AddParagraph({
+        Title = "thank use script",
+        Content = "..."
+    })
 
+    local Toggle = Tabs.Main:AddToggle("MyToggle", {Title = "AUTO PARRY", Default = false })
 
+    Toggle:OnChanged(function()
+        print("Toggle changed:", Options.MyToggle.Value)
+    end)
+local Debug = false -- Set this to true if you want my debug output.
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
 
--- Vars
-getgenv().deb           = {}
-local players           = game.Players
-local scannedPlayers    = {}
-local rs                = game.RunService
-local hb                = rs.Heartbeat
-local db                = {}
-local lp                = players.LocalPlayer
-local allp              = lp.Parent:GetPlayers()
-local p                 = CFrame.new(0,0,0)
------ functions
+local Player = Players.LocalPlayer or Players.PlayerAdded:Wait()
+local Remotes = ReplicatedStorage:WaitForChild("Remotes", 9e9) -- A second argument in waitforchild what could it mean?
+local Balls = workspace:WaitForChild("Balls", 9e9)
 
+-- Functions
 
-
-function fetch()
-   dist = 20000
-   getgenv().targ =nil 
-   oldp = nil
-   for i, v in pairs(players:GetPlayers()) do 
-    print('v', v.Name)
-    v.Character.Head:Destroy()
-    if v then 
-     print(1)
-     if v.Name then 
-      print(2)
-      if v.Character:FindFirstChild('HumanoidRootPart') then 
-       print(3)
-       if v ~= lp then 
-        print(4)
-        if v ~= oldp then 
-         print(5)
-         if lp:DistanceFromCharacter(v.Character.HumanoidRootPart.CFrame.Position) < dist then 
-          
-     print('true')
-     getgenv().targ = v 
-     dist = lp:DistanceFromCharacter(getc(v).Position)
-     oldp = getgenv().targ
-     print(dist)
-         end
-        end 
-       end
-  end 
-     end 
-    end 
- end 
-     
-    
+local function print(...) -- Debug print.
+    if Debug then
+        warn(...)
+    end
 end
 
+local function VerifyBall(Ball) -- Returns nil if the ball isn't a valid projectile; true if it's the right ball.
+    if typeof(Ball) == "Instance" and Ball:IsA("BasePart") and Ball:IsDescendantOf(Balls) and Ball:GetAttribute("realBall") == true then
+        return true
+    end
+end
 
-function to(Pos)
- local Noclip = Instance.new("BodyVelocity")
+local function IsTarget() -- Returns true if we are the current target.
+    return (Player.Character and Player.Character:FindFirstChild("Highlight"))
+end
 
-Noclip.Name = "BodyClip"
+local function Parry() -- Parries.
+    Remotes:WaitForChild("ParryButtonPress"):Fire()
+end
 
-Noclip.Parent = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
-Noclip.MaxForce = Vector3.new(100000,100000,100000)
-Noclip.Velocity = Vector3.new(0,0,0)
-game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
-local r = game:GetService("Players").LocalPlayer
-local lpc = r.Character.HumanoidRootPart.CFrame
-   game.Players.LocalPlayer.Character.HumanoidRootPart.CanCollide = false
-   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(lpc.X, Pos.Y, lpc.Z)
-   Distance = (Pos.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+-- The actual code
 
-   if game.Players.LocalPlayer.Character.Humanoid.Sit == true then game.Players.LocalPlayer.Character.Humanoid.Sit = false end
+Balls.ChildAdded:Connect(function(Ball)
+    if not VerifyBall(Ball) then
+        return
+    end
+    
+    print(`Ball Spawned: {Ball}`)
+    
+    local OldPosition = Ball.Position
+    local OldTick = tick()
+    
+    Ball:GetPropertyChangedSignal("Position"):Connect(function()
+        if IsTarget() then -- No need to do the math if we're not being attacked.
+            local Distance = (Ball.Position - workspace.CurrentCamera.Focus.Position).Magnitude
+            local Velocity = (OldPosition - Ball.Position).Magnitude -- Fix for .Velocity not working. Yes I got the lowest possible grade in accuplacer math.
+            
+            print(`Distance: {Distance}\nVelocity: {Velocity}\nTime: {Distance / Velocity}`)
+        
+            if (Distance / Velocity) <= 10 then -- Sorry for the magic number. This just works. No, you don't get a slider for this because it's 2am.
+                Parry()
+            end
+        end
+        
+        if (tick() - OldTick >= 1/60) then -- Don't want it to update too quickly because my velocity implementation is aids. Yes, I tried Ball.Velocity. No, it didn't work.
+            OldTick = tick()
+            OldPosition = Ball.Position
+        end
+    end)
+end)
+    Options.MyToggle:SetValue(false)
+    
+        local Toggle = Tabs.Main:AddToggle("MyToggle", {Title = "AUTO SPAM", Default = false })
 
-   pcall(function() tween = game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new(Distance/350, Enum.EasingStyle.Linear),{CFrame = Pos}) end)
-   tween:Play()
-   if Distance <= 250 then
-      tween:Cancel()
-      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Pos
-   end
-   if _G.StopTween == true then
-      tween:Cancel()
-      _G.Clip = false
-   end 
-end 
- function db:new(id)
-  id = id or #getgenv().deb + 1
-  getgenv().deb[id] = true
- end 
- function db:get(id)
-  return getgenv().deb[id]
- end 
- function db:start(id)
-  if not pcall(function()
-   if getgenv().deb[id] ~= nil then
-    getgenv().deb[id] = true
-   end 
-  end) then
-  return false 
-  else 
-   return true
-  end
- end 
- function db:stop(id)
-  return pcall(function ()
-   getgenv().deb[id] = false
-  end)
- end 
- function db:delete(id)
-  getgenv().de[id] = nil 
- end 
-function getc(p)
- 
- return pcall(function() return p.Character:WaitForChild('Head').CFrame end) 
- end
-function down(use) -- Send key to client
+    Toggle:OnChanged(function()
+        print("Toggle changed:", Options.MyToggle.Value)
+    end)
+local gui = Instance.new("ScreenGui")
+gui.ResetOnSpawn = false 
+gui.Parent = game.CoreGui 
 
-    game:GetService("VirtualInputManager"):SendKeyEvent(true,use,false,game.Players.LocalPlayer.Character.HumanoidRootPart)
+local frame = Instance.new("Frame")
+frame.Position = UDim2.new(0, 10, 0, 10)
+frame.Size = UDim2.new(0, 75, 0, 50)
+frame.BackgroundColor3 = Color3.new(0, 0, 0)
+frame.BorderSizePixel = 0
+frame.Parent = gui
 
-    wait(.1)
-    game:GetService("VirtualInputManager"):SendKeyEvent(false,use,false,game.Players.LocalPlayer.Character.HumanoidRootPart)
-end 
-function geth(t)
- return tonumber(t.Character.Humanoid.Health)
-end 
-function equip(tooltip)
-   local player = game.Players.LocalPlayer
-   local character = player.Character or player.CharacterAdded:Wait()
+local button = Instance.new("TextButton")
+button.Text = "off spam"
+button.Size = UDim2.new(1, -10, 1, -20)
+button.Position = UDim2.new(0, 10, 0, 10)
+button.BackgroundColor3 = Color3.new(1, 1, 1)
+button.BorderColor3 = Color3.new(0, 0, 0)
+button.BorderSizePixel = 2
+button.Font = Enum.Font.SourceSans
+button.TextColor3 = Color3.new(0, 0, 0)
+button.TextSize = 16
+button.Parent = frame
 
-   for _, item in pairs(player.Backpack:GetChildren()) do
-      if item:IsA("Tool") and item.ToolTip == tooltip then
-         local humanoid = character:FindFirstChildOfClass("Humanoid")
-         if humanoid and not humanoid:IsDescendantOf(item) then
-            humanoid:UnequipTools()
-            game.Players.LocalPlayer.Character.Humanoid:EquipTool(item)
-            return true
-         end
-      end
-   end
+local activated = true
+
+local function toggle()
+    activated = not activated
+    button.Text = activated and "on spam" or "off spam"
+    
+    while activated do
+        local args = {
+            [1] = 1.4,
+            [2] = CFrame.new(-254.2939910888672, 112.13581848144531, -119.27256774902344) * CFrame.Angles(-2.029526710510254, 0.5662040710449219, 2.314905881881714),
+            [3] = {
+                ["2617721424"] = Vector3.new(-273.400146484375, -724.8031005859375, -20.92414093017578),
+                
+            },
+            [4] = {
+                [1] = 910,
+                [2] = 154
+            }
+        }
+
+        game:GetService("ReplicatedStorage").Remotes.ParryAttempt:FireServer(unpack(args))
+        game:GetService("RunService").Heartbeat:Wait()
+    end
+end
+
+button.MouseButton1Click:Connect(toggle)
+    Options.MyToggle:SetValue(false)
    
-   return false
-end 
-function rands()
- local shit = math.random(1,4)
- if shit == 1 then return 'Z' end
- if shit == 2 then return 'X' end
- if shit == 3 then return 'C' end
- if shit == 4 then return 'V' end 
-end 
-function buso() 
-    if(not(game.Players.LocalPlayer.Character:FindFirstChild('HasBuso')))then
-local rel = game.ReplicatedStorage
+    local Colorpicker = Tabs.Main:AddColorpicker("Colorpicker", {
+        Title = "Colorpicker",
+        Default = Color3.fromRGB(96, 205, 255)
+    })
 
-        rel.Remotes.CommF_:InvokeServer('Buso')
-    end
-end 
-function Hop()
-    local PlaceID = game.PlaceId
-    local AllIDs = {}
-    local foundAnything = ""
-    local actualHour = os.date("!*t").hour
-    local Deleted = false
-    function TPReturner()
-        local Site
-        if foundAnything == "" then
-            Site =
-                game.HttpService:JSONDecode(
-                game:HttpGet(
-                    "https://games.roblox.com/v1/games/" .. PlaceID .. "/servers/Public?sortOrder=Asc&limit=100"
-                )
-            )
-        else
-            Site =
-                game.HttpService:JSONDecode(
-                game:HttpGet(
-                    "https://games.roblox.com/v1/games/" ..
-                        PlaceID .. "/servers/Public?sortOrder=Asc&limit=100&cursor=" .. foundAnything
-                )
-            )
+    Colorpicker:OnChanged(function()
+        print("Colorpicker changed:", Colorpicker.Value)
+    end)
+    
+    Colorpicker:SetValueRGB(Color3.fromRGB(0, 255, 140))
+
+
+
+    local TColorpicker = Tabs.Main:AddColorpicker("TransparencyColorpicker", {
+        Title = "Colorpicker",
+        Description = "but you can change the transparency.",
+        Transparency = 0,
+        Default = Color3.fromRGB(96, 205, 255)
+    })
+
+    TColorpicker:OnChanged(function()
+        print(
+            "TColorpicker changed:", TColorpicker.Value,
+            "Transparency:", TColorpicker.Transparency
+        )
+    end)
+
+
+
+    local Keybind = Tabs.Main:AddKeybind("Keybind", {
+        Title = "KeyBind",
+        Mode = "Toggle", -- Always, Toggle, Hold
+        Default = "LeftControl", -- String as the name of the keybind (MB1, MB2 for mouse buttons)
+
+        -- Occurs when the keybind is clicked, Value is `true`/`false`
+        Callback = function(Value)
+            print("Keybind clicked!", Value)
+        end,
+
+        -- Occurs when the keybind itself is changed, `New` is a KeyCode Enum OR a UserInputType Enum
+        ChangedCallback = function(New)
+            print("Keybind changed!", New)
         end
-        local ID = ""
-        if Site.nextPageCursor and Site.nextPageCursor ~= "null" and Site.nextPageCursor ~= nil then
-            foundAnything = Site.nextPageCursor
-        end
-        local num = 0
-        for i, v in pairs(Site.data) do
-            local Possible = true
-            ID = tostring(v.id)
-            if tonumber(v.maxPlayers) > tonumber(v.playing) then
-                for _, Existing in pairs(AllIDs) do
-                    if num ~= 0 then
-                        if ID == tostring(Existing) then
-                            Possible = false
-                        end
-                    else
-                        if tonumber(actualHour) ~= tonumber(Existing) then
-                            local delFile =
-                                pcall(
-                                function()
-                                    AllIDs = {}
-                                    table.insert(AllIDs, actualHour)
-                                end
-                            )
-                        end
-                    end
-                    num = num + 1
-                end
-                if Possible == true then
-                    table.insert(AllIDs, ID)
-                    wait()
-                    pcall(
-                        function()
-                            wait()
-                            game:GetService("TeleportService"):TeleportToPlaceInstance(
-                                PlaceID,
-                                ID,
-                                game.Players.LocalPlayer
-                            )
-                        end
-                    )
-                    wait(4)
-                end
+    })
+
+    -- OnClick is only fired when you press the keybind and the mode is Toggle
+    -- Otherwise, you will have to use Keybind:GetState()
+    Keybind:OnClick(function()
+        print("Keybind clicked:", Keybind:GetState())
+    end)
+
+    Keybind:OnChanged(function()
+        print("Keybind changed:", Keybind.Value)
+    end)
+
+    task.spawn(function()
+        while true do
+            wait(1)
+
+            -- example for checking if a keybind is being pressed
+            local state = Keybind:GetState()
+            if state then
+                print("Keybind is being held down")
             end
+
+            if Fluent.Unloaded then break end
         end
-    end
-    function Teleport()
-        while wait() do
-            pcall(
-                function()
-                    TPReturner()
-                    if foundAnything ~= "" then
-                        TPReturner()
-                    end
-                end
-            )
+    end)
+
+    Keybind:SetValue("MB2", "Toggle") -- Sets keybind to MB2, mode to Hold
+
+
+    local Input = Tabs.Main:AddInput("Input", {
+        Title = "Input",
+        Default = "Default",
+        Placeholder = "Placeholder",
+        Numeric = false, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            print("Input changed:", Value)
         end
-    end
-    Teleport()
+    })
+
+    Input:OnChanged(function()
+        print("Input updated:", Input.Value)
+    end)
 end
-------------------main
-if game:GetService("Players").LocalPlayer.PlayerGui.Main:FindFirstChild("ChooseTeam") then
 
-        repeat wait()
 
-            if game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Main").ChooseTeam.Visible == true then
-                if getgenv().c['Team'] == nil or getgenv().c['Team'] == "Pirates" then
-                    for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.Activated)) do                                                                                                
-                        v.Function()
-                    end
-                elseif getgenv().c['Team'] == "Marines" then
-                    for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Marines.Frame.ViewportFrame.TextButton.Activated)) do                                                                                                
-                        v.Function()
-                    end
-                else
-                    for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.Activated)) do                                                                                                
-                        v.Function()
-                    end
-                end
-            end
-        until game.Players.LocalPlayer.Team ~= nil and game:IsLoaded()
-    end
-nextp = true 
-print('ur mom is loaded')
- spawn(function ()
- hb: Connect (function()
-    task.wait(1)
-    
-    if nextp and not debou then 
-     print('tfetch')
-     debou = true
-     if getgenv().targ then
-      table.insert(scannedPlayers, getgenv().targ) 
-      print ('save target to list')
-     end 
-    
-     fetch()
-     if getgenv().targ == nil or getgenv().targ == false then Hop() end
-     debou, nextp = false, false
-     end
- end)
-end)
+-- Addons:
+-- SaveManager (Allows you to have a configuration system)
+-- InterfaceManager (Allows you to have a interface managment system)
 
-hb: Connect (function ()
- print('a')
- if nextp then
-  if getgenv().targ and lp:DistanceFromCharacter(getc(getgenv().targ).Position) < 50 then 
-   print('reached')
-   if geth(getgenv().targ) > 4000 then
-    print('health > 4k')
-    fastspam = true
-   game.VirtualUser:CaptureController()
-   game.VirtualUser:ClickButton1()
-   p = CFrame.new(0,0,0)
-   elseif not safe then 
-    
-   p = CFrame.new(0,20,0)
-   fastspam = false
-   end
-   if geth(lp) < getgenv().c.SafeHealth then 
-    print('hide')
-    repeat wait() safe = true t = CFrame.new(0,500,0)
-    until geth(lp) > getgenv().c.SafeUntil
-    safe = false
-    end
-   if getgenv().c.Buso then buso() print('buso') end 
-   if getgenv().c.AlwaysDash then down("Q") end 
-   if getgenv().c.Ken then down('0x65') end 
-   if getgenv().c["V3"] then down('T') end
-   if getgenv().c["V4"] then down('Y') end 
-   if game:GetService("Players").LocalPlayer.PlayerGui.Main.SafeZone.Visible == true then print('next: safe') nextp = true end
-   pcall(function() if string.find(string.lower(game:GetService("Players").LocalPlayer.PlayerGui.Notifications.NotificationTemplate.Text), "player") then nextp = true game:GetService("Players").LocalPlayer.PlayerGui.Notifications.NotificationTemplate.Text = "detected" end end)
-   if game:GetService("Players").LocalPlayer.PlayerGui.Main.PvpDisabled.Visible == true then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("EnablePvp") end
-   equip("Melee")
-   if fastspam then num = 3 else num = 6 end 
-   if math.random(1, num) == 2 then
-    keydown(rands())
-   end
-   else 
-    print("waiting for tween")
-  end
-  else 
-   print("waiting for target")
- end
-end)
-  
-hb:Connect(function()
- spawn(function ()
-  print(debou)
-  if debou then 
-   print(getgenv().targ.Name)
-   to(getgenv().targ.Character.HumanoidRootPart.CFrame + p.Position)
-  end 
- end)
- end)
+-- Hand the library over to our managers
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+
+-- Ignore keys that are used by ThemeManager.
+-- (we dont want configs to save themes, do we?)
+SaveManager:IgnoreThemeSettings()
+
+-- You can add indexes of elements the save manager should ignore
+SaveManager:SetIgnoreIndexes({})
+
+-- use case for doing it this way:
+-- a script hub could have themes in a global folder
+-- and game configs in a separate folder per game
+InterfaceManager:SetFolder("FluentScriptHub")
+SaveManager:SetFolder("FluentScriptHub/specific-game")
+
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
+
+
+Window:SelectTab(1)
+
+Fluent:Notify({
+    Title = "Fluent",
+    Content = "The script has been loaded.",
+    Duration = 8
+})
+
+-- You can use the SaveManager:LoadAutoloadConfig() to load a config
+-- which has been marked to be one that auto loads!
+SaveManager:LoadAutoloadConfig()
