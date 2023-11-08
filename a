@@ -1,27 +1,103 @@
-------- config 
-repeat wait() until game:IsLoaded() and game.Players and game.Players.LocalPlayer and game.Players.LocalPlayer.Character and game.Players:GetPlayers()
-getgenv().c = {
-    ["Team"]                      = "Pirates"
-  , ["Buso"]                      = 1
-  , ["Ken"]                       = 1 
-  , ["AlwaysDash"]                = 1
-  , ["V3"]                        = 1 
-  , ["V4"]                        = 1 
-  , ["MainItem"]                  = "Blox Fruit"
-  , ["MainClick"]                 = "Melee"
-  , ["MainItemSkillToggle"]       = {"Click", "Z", "X", "C", "V"}
-  , ["MainClickSkillToggle"]      = {"Click", "Z", "C"}
-  , ["Hop"]                       = 1
-  , ["SpamChat"]                  = {"aaaa"}
-  , ["Invisble"]                  = 0 
-  , ["Webhooks"]                  = 0 
-  , ["SafeMode"]                  = 1 
-  , ["SafeHealth"]                = 5000
-  , ["SafeUntil"]                 = 6000
-  , ["BypassTP"]                  = 1 
-  , ["BypassDist"]                = 5000
-  , ["YTween"]                    = 1 
-  , ["TweenSpeed"]                = 350
+-- Config format 
+getgenv().config = { 
+  ["gui"] = {
+    ["show"] = true,
+    ["background"] = {
+      ["big"] = {
+        ["id"] = "rblxassetid://000",
+        ["transparent"] = 1
+      },
+      ["mainbg"] = {
+        ["id"] = "...",
+        ["transparent"] = 50
+      }
+    }
+  },
+  ["game"] = {
+    ["resettp"] = true,
+    ["team"] = "Pirates", -- "p/m"
+    ["safemode"] = true,
+    ["buso"] = true,
+    ["ken"] = true,
+    ["fps"] = {
+      ["screen"] = "white", -- black | white | normal
+      ["fpsboost"] = true 
+    },
+    ["character"] = {
+      ["invisible"] = true,
+    },
+    ["skipspecialfruit"] = true,
+    ["lock"] = {
+      ["value"] = "3000001", -- cant 
+    },
+    ["weapon"] = {
+      ["Melee"] = {
+        ["Z"] = {
+          ["hold"] = 0.3,
+          ["use"] = true
+        },
+        ["X"] = {
+          ["hold"] = 0.3,
+          ["use"] = true
+        },
+        ["C"] = {
+          ["hold"] = 0.3,
+          ["use"] = true
+        },
+      },
+      ["Blox Fruit"] = {
+        
+        ["Z"] = {
+          ["hold"] = 0.3,
+          ["use"] = true
+        },
+        ["X"] = {
+          ["hold"] = 0.3,
+          ["use"] = true
+        },
+        ["C"] = {
+          ["hold"] = 0.3,
+          ["use"] = true
+        },
+        ["V"] = {
+          ["hold"] = 0.3,
+          ["use"] = true
+        },
+        ["F"] = {
+          ["hold"] = 0.3,
+          ["use"] = true
+        },
+      },
+      ["Gun"] = {
+        
+        ["Z"] = {
+          ["hold"] = 0.3,
+          ["use"] = true
+        },
+        ["X"] = {
+          ["hold"] = 0.3,
+          ["use"] = true
+        },
+      },
+      ["Sword"] = {
+        
+        ["Z"] = {
+          ["hold"] = 0.3,
+          ["use"] = true
+        },
+        ["X"] = {
+          ["hold"] = 0.3,
+          ["use"] = true
+        },
+      },
+    },
+  }, 
+  ["webhook"] = {
+    ["type"] = "embed", -- embed | text 
+    ["image"] = "nil", 
+    ["request_type"] = "3rd", -- 
+    ["3rd_hook"] = "nil"
+  },
 }
 
 
@@ -29,155 +105,117 @@ getgenv().c = {
 
 
 
--- Vars
-getgenv().deb           = {}
-local players           = game.Players
-local scannedPlayers    = {}
-local rs                = game.RunService
-local hb                = rs.Heartbeat
-local db                = {}
-local lp                = players.LocalPlayer
-local allp              = lp.Parent:GetPlayers()
-local p                 = CFrame.new(0,0,0)
------ functions
 
 
 
-function fetch()
-   dist = 20000
-   getgenv().targ =nil 
-   oldp = nil
-   for i, v in pairs(players:GetPlayers()) do 
-    print('v', v.Name)
-    v.Character.Head:Destroy()
-    if v then 
-     print(1)
-     if v.Name then 
-      print(2)
-      if v.Character:FindFirstChild('HumanoidRootPart') then 
-       print(3)
-       if v ~= lp then 
-        print(4)
-        if v ~= oldp then 
-         print(5)
-         if lp:DistanceFromCharacter(v.Character.HumanoidRootPart.CFrame.Position) < dist then 
-          
-     print('true')
-     getgenv().targ = v 
-     dist = lp:DistanceFromCharacter(getc(v).Position)
-     oldp = getgenv().targ
-     print(dist)
-         end
-        end 
-       end
-  end 
-     end 
-    end 
- end 
-     
+
+-- CHECK CONFIG [! - IMPORTANT]
+getgenv().script, err = pcall(function()
+
+if not getgenv().config or getgenv().config == nil then 
+  game.Players.LocalPlayer:Kick("configconfigconfigconfigconfigconfigconfigconfigconfigconfigconfigconfig")
+  return 0
+end 
+
+--Liblaries
+local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/Jxereas/UI-Libraries/main/notification_gui_library.lua", true))()
+loadstring(game:HttpGet'https://akatsuki.monnn1.repl.co/aimlib.lua')()
+local DiscordLib = loadstring(game:HttpGet"https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/discord%20lib.txt")()
+
+
+-- Variable 
+getgenv().list = {}
+getgenv().ticks = 150
+getgenv().plist = {}
+_G.debounce = {}
+_G.hunt = true 
+oldtarget = nil 
     
+--Function 
+
+
+function killinsert(target) 
+ for i, v in pairs(getgenv().killed) do 
+  if getgenv().killed.Name == target.Name then return end
+ end 
+ table.insert(getgenv().killed, getgenv().target)
 end
 
+function nametoplayer(name) 
+ return game.Players[name]
+end
 
-function to(Pos)
- local Noclip = Instance.new("BodyVelocity")
-
-Noclip.Name = "BodyClip"
-
-Noclip.Parent = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
-Noclip.MaxForce = Vector3.new(100000,100000,100000)
-Noclip.Velocity = Vector3.new(0,0,0)
-game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
-local r = game:GetService("Players").LocalPlayer
-local lpc = r.Character.HumanoidRootPart.CFrame
-   game.Players.LocalPlayer.Character.HumanoidRootPart.CanCollide = false
-   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(lpc.X, Pos.Y, lpc.Z)
-   Distance = (Pos.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-
-   if game.Players.LocalPlayer.Character.Humanoid.Sit == true then game.Players.LocalPlayer.Character.Humanoid.Sit = false end
-
-   pcall(function() tween = game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new(Distance/350, Enum.EasingStyle.Linear),{CFrame = Pos}) end)
-   tween:Play()
-   if Distance <= 250 then
-      tween:Cancel()
-      game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Pos
-   end
-   if _G.StopTween == true then
-      tween:Cancel()
-      _G.Clip = false
-   end 
-end 
- function db:new(id)
-  id = id or #getgenv().deb + 1
-  getgenv().deb[id] = true
- end 
- function db:get(id)
-  return getgenv().deb[id]
- end 
- function db:start(id)
-  if not pcall(function()
-   if getgenv().deb[id] ~= nil then
-    getgenv().deb[id] = true
-   end 
-  end) then
-  return false 
-  else 
-   return true
-  end
- end 
- function db:stop(id)
-  return pcall(function ()
-   getgenv().deb[id] = false
-  end)
- end 
- function db:delete(id)
-  getgenv().de[id] = nil 
- end 
-function getc(p)
+function getNearestTarget()
+dist = math.huge
+p = nil
+ for i, v in pairs(getgenv().players) do
  
- return pcall(function() return p.Character:WaitForChild('Head').CFrame end) 
+ if v ~= game.Players.LocalPlayer and v.Character and v and p ~= v then 
+    
+   for _, v2 in pairs(getgenv().killed) do
+   if v == v2 then
+   unscan = v2
  end
-function down(use) -- Send key to client
+end
+  if (v.Character.HumanoidRootPart.CFrame.Position - game.Players.LocalPlayer.Character:WaitForChild('HumanoidRootPart').CFrame.Position). Magnitude < dist and unscan ~= v then 
 
-    game:GetService("VirtualInputManager"):SendKeyEvent(true,use,false,game.Players.LocalPlayer.Character.HumanoidRootPart)
+   dist = (v.Character.HumanoidRootPart.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position). magnitude 
+   p = v
+ end
+ end
+ end
+return p
+end
 
-    wait(.1)
-    game:GetService("VirtualInputManager"):SendKeyEvent(false,use,false,game.Players.LocalPlayer.Character.HumanoidRootPart)
-end 
-function geth(t)
- return tonumber(t.Character.Humanoid.Health)
-end 
-function equip(tooltip)
-   local player = game.Players.LocalPlayer
-   local character = player.Character or player.CharacterAdded:Wait()
+function topos(gotoCFrame) --- tween to position 
+  if _G.debounce.Tween then return 0 end
+  if (game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position - gotoCFrame.Position).Magnitude > 3000 and getgenv().config["game"]["resettp"] then 
+        if num == nil and oldtarget ~= getgenv().target then
+    num = 0 
+oldtarget = getgenv().target
 
-   for _, item in pairs(player.Backpack:GetChildren()) do
-      if item:IsA("Tool") and item.ToolTip == tooltip then
-         local humanoid = character:FindFirstChildOfClass("Humanoid")
-         if humanoid and not humanoid:IsDescendantOf(item) then
-            humanoid:UnequipTools()
-            game.Players.LocalPlayer.Character.Humanoid:EquipTool(item)
-            return true
-         end
-      end
-   end
-   
-   return false
-end 
-function rands()
- local shit = math.random(1,4)
- if shit == 1 then return 'Z' end
- if shit == 2 then return 'X' end
- if shit == 3 then return 'C' end
- if shit == 4 then return 'V' end 
-end 
-function buso() 
-    if(not(game.Players.LocalPlayer.Character:FindFirstChild('HasBuso')))then
-local rel = game.ReplicatedStorage
+        end
 
-        rel.Remotes.CommF_:InvokeServer('Buso')
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.X, 100000, game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Z)
+    wait(4)
+    repeat wait()
+ 
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = gotoCFrame
+    num = num + 1
+    until (game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position - gotoCFrame.Position).Magnitude < 1000 or num == 300
+  end
+  
+  repeat wait ()
+  until tonumber(game.Players.LocalPlayer.Character:WaitForChild('Humanoid').Health) >= 1
+  wait(.1)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.X, gotoCFrame.Y, game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Z)
+    pcall(function()
+
+    if game.Players.LocalPlayer.Character.Humanoid.Health >= 0 then
+        game.Players.LocalPlayer.Character.Humanoid.Sit = false
+        
+    if (game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart.Position - gotoCFrame.Position).Magnitude <= 200 then
+        pcall(function() 
+            tweenz:Cancel()
+        end)
+        game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart.CFrame = gotoCFrame
+    else
+        local tween_s = game:service"TweenService"
+        local info = TweenInfo.new((game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart.Position - gotoCFrame.Position).Magnitude/325, Enum.EasingStyle.Linear)
+         tween, err = pcall(function()
+            tweenz = tween_s:Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], info, {CFrame = gotoCFrame})
+            tweenz:Play()
+        end)
+        if not tween then return err end
     end
+    end
+    function _TweenCanCle()
+        tweenz:Cancel()
+    end
+    end)
 end 
+
+--Hop 
 function Hop()
     local PlaceID = game.PlaceId
     local AllIDs = {}
@@ -261,98 +299,268 @@ function Hop()
     end
     Teleport()
 end
-------------------main
-if game:GetService("Players").LocalPlayer.PlayerGui.Main:FindFirstChild("ChooseTeam") then
 
-        repeat wait()
+-- buso 
+function buso() 
+    if(not(game.Players.LocalPlayer.Character:FindFirstChild('HasBuso')))then
+local rel = game.ReplicatedStorage
 
-            if game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Main").ChooseTeam.Visible == true then
-                if getgenv().c['Team'] == nil or getgenv().c['Team'] == "Pirates" then
-                    for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.Activated)) do                                                                                                
-                        v.Function()
-                    end
-                elseif getgenv().c['Team'] == "Marines" then
-                    for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Marines.Frame.ViewportFrame.TextButton.Activated)) do                                                                                                
-                        v.Function()
-                    end
-                else
-                    for i, v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.Activated)) do                                                                                                
-                        v.Function()
-                    end
-                end
-            end
-        until game.Players.LocalPlayer.Team ~= nil and game:IsLoaded()
+        rel.Remotes.CommF_:InvokeServer('Buso')
     end
-nextp = true 
-print('ur mom is loaded')
- spawn(function ()
- hb: Connect (function()
-    task.wait(1)
+end
+
+function keydown(use) -- Send key to client
+
+    game:GetService("VirtualInputManager"):SendKeyEvent(true,use,false,game.Players.LocalPlayer.Character.HumanoidRootPart)
+
+    wait(.1)
+    game:GetService("VirtualInputManager"):SendKeyEvent(false,use,false,game.Players.LocalPlayer.Character.HumanoidRootPart)
+end 
+
+--equip tool by tooltip
+function equip(tooltip)
+   local player = game.Players.LocalPlayer
+   local character = player.Character or player.CharacterAdded:Wait()
+
+   for _, item in pairs(player.Backpack:GetChildren()) do
+      if item:IsA("Tool") and item.ToolTip == tooltip then
+         local humanoid = character:FindFirstChildOfClass("Humanoid")
+         if humanoid and not humanoid:IsDescendantOf(item) then
+            humanoid:UnequipTools()
+            game.Players.LocalPlayer.Character.Humanoid:EquipTool(item)
+            return true
+         end
+      end
+   end
+   
+   return false
+end
+
+-- big part 
+function bighitbox(part)
+  part.Character.HumanoidRootPart.Size = Vector3.new(50,50,50)
+end 
+
+-- using random item (wont be call)
+function spam()
+
+for i, v in pairs(getgenv().config["game"]["weapon"]) do 
+print(i)
     
-    if nextp and not debou then 
-     print('tfetch')
-     debou = true
-     if getgenv().targ then
-      table.insert(scannedPlayers, getgenv().targ) 
-      print ('save target to list')
-     end 
     
-     fetch()
-     if getgenv().targ == nil or getgenv().targ == false then Hop() end
-     debou, nextp = false, false
-     end
- end)
+    equip(i)
+        for i2, v2 in pairs(v) do 
+      print('i2: '..i2)    
+           if v2 and v2.use then 
+           getgenv().down = true
+wait()
+            for a=0,(v2.hold * 10) do  
+
+              keydown(i2) 
+              a = a + 1
+              
+          end 
+          getgenv().down = false 
+            wait(1)
+        end
+      end
+    
+    end
+  end 
+
+-- get cframe 
+function getpcframe(p)
+ if tonumber(game.Players.LocalPlayer.Character.Humanoid.Health) < 5000 and tonumber(game.Players.LocalPlayer.Character.Humanoid.Health) > 1 then
+                 Notification.new("info", "Akatsuki", 'Hiding...')
+                 return p.Character.HumanoidRootPart.CFrame + Vector3.new(0, 900, 00)
+             end 
+  if getgenv().down then
+  return p.Character: GetPrimaryPartCFrame() + Vector3.new(0, 150, 0)
+  end
+
+return p.Character: GetPrimaryPartCFrame()
+end 
+
+-- log 
+function log(str) 
+getgenv().btns2:Label(str)
+end 
+
+-- Starter Script ._.
+
+spawn(function() -- Create Part Below Player 
+ while wait() do
+    local player = game.Players.LocalPlayer
+  
+    local part = Instance.new("Part")
+    part.Anchored = true
+    part.Size = Vector3.new(20, 1, 20) 
+    part.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame - Vector3.new(0, (game.Players.LocalPlayer.Character.HumanoidRootPart.Size.Y/4) + (part.Size.Y/2), 0)
+    part.Parent = workspace 
+    part.Transparency = 00
+    while wait() do
+        part.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.X, game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Y - 40, game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Z)
+    end 
+end
 end)
 
-hb: Connect (function ()
- print('a')
- if nextp then
-  if getgenv().targ and lp:DistanceFromCharacter(getc(getgenv().targ).Position) < 50 then 
-   print('reached')
-   if geth(getgenv().targ) > 4000 then
-    print('health > 4k')
-    fastspam = true
-   game.VirtualUser:CaptureController()
-   game.VirtualUser:ClickButton1()
-   p = CFrame.new(0,0,0)
-   elseif not safe then 
-    
-   p = CFrame.new(0,20,0)
-   fastspam = false
-   end
-   if geth(lp) < getgenv().c.SafeHealth then 
-    print('hide')
-    repeat wait() safe = true t = CFrame.new(0,500,0)
-    until geth(lp) > getgenv().c.SafeUntil
-    safe = false
+for i, v in pairs(game.Players:GetPlayers()) do --UIs Player List
+ table.insert(getgenv().plist, v.Name)
+end 
+
+-- UIs 
+
+
+
+local win = DiscordLib:Window("Akatsuki Community")
+
+local serv = win:Server("Game", "")
+local btns = serv:Channel("• Hunt") 
+local label = btns:Label("Welcome To Akatsuki Community!")
+local drop = btns:Dropdown("Select Target", getgenv().plist, function(bool)
+getgenv().target = nametoplayer(bool)
+end)
+btns:Toggle("Start",true, function(bool)
+_G.hunt = bool
+end)
+btns:Button("Next Player", function()
+game.Players.LocalPlayer.Character.Humanoid.Health = 0
+end)
+btns:Button("Hop", function()
+
+_G.hunt = false 
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.X, 255500, game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Z)
+Hop()
+while wait() do
+table.insert('a', getgenv().target)
+end
+end)
+ getgenv().btns2 = serv:Channel("• log")
+for i, v in pairs(game.Players:GetPlayers()) do 
+ getgenv().btns2:Label('• '.. v.Name .. '[Lv. '.. v.Data.Level.Value .. '] - [❌]')
+end 
+
+-- Main Script 
+
+--waitload
+repeat wait() 
+ if game:IsLoaded() then 
+    if game.Players and Game.Players.LocalPlayer then 
+     break
     end
-   if getgenv().c.Buso then buso() print('buso') end 
-   if getgenv().c.AlwaysDash then down("Q") end 
-   if getgenv().c.Ken then down('0x65') end 
-   if getgenv().c["V3"] then down('T') end
-   if getgenv().c["V4"] then down('Y') end 
-   if game:GetService("Players").LocalPlayer.PlayerGui.Main.SafeZone.Visible == true then print('next: safe') nextp = true end
-   pcall(function() if string.find(string.lower(game:GetService("Players").LocalPlayer.PlayerGui.Notifications.NotificationTemplate.Text), "player") then nextp = true game:GetService("Players").LocalPlayer.PlayerGui.Notifications.NotificationTemplate.Text = "detected" end end)
-   if game:GetService("Players").LocalPlayer.PlayerGui.Main.PvpDisabled.Visible == true then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("EnablePvp") end
-   equip("Melee")
-   if fastspam then num = 3 else num = 6 end 
-   if math.random(1, num) == 2 then
-    keydown(rands())
-   end
-   else 
-    print("waiting for tween")
   end
-  else 
-   print("waiting for target")
- end
+until 1 == 2
+    
+-- Team Join 
+    repeat wait()
+
+		if game:GetService("Players").LocalPlayer.PlayerGui.Main:FindFirstChild("ChooseTeam") then
+
+			if getgenv().config["game"]["team"] == nil or getgenv().config["game"]["team"] == "Pirates"  then
+            local A_1 = "SetTeam"
+            local A_2 = "Pirates"
+            local Event = game:GetService("ReplicatedStorage").Remotes["CommF_"]
+            Event:InvokeServer(A_1, A_2)
+
+			elseif getgenv().config["game"]["team"] == "Marines"  then
+				local A_1 = "SetTeam"
+				local A_2 = "Marines"
+				local Event = game:GetService("ReplicatedStorage").Remotes["CommF_"]
+				Event:InvokeServer(A_1, A_2)
+			else
+				game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.Size = UDim2.new(0, 10000, 0, 10000)
+				game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.Position = UDim2.new(-4, 0, -5, 0)
+				game:GetService("Players")["LocalPlayer"].PlayerGui.Main.ChooseTeam.Container.Pirates.Frame.ViewportFrame.TextButton.BackgroundTransparency = 1
+				wait(.5)
+				game:GetService'VirtualUser':Button1Down(Vector2.new(99,99))
+				game:GetService'VirtualUser':Button1Up(Vector2.new(99,99))
+			end
+		end
+	until game.Players.LocalPlayer.Team ~= nil and game:IsLoaded() 
+	
+	wait(1)
+
+game.Players.LocalPlayer.Character.Humanoid.Health = 0 - math.huge
+wait()
+getgenv().target = game.Players.LocalPlayer 
+
+-- buso 
+    spawn(function()
+  while getgenv().config["game"]["buso"] and wait(1) do 
+    buso()
+ wait()
+end
+end) 
+    
+-- Starting Fetch Target
+
+spawn(function()
+    while _G.hunt do
+        if tonumber(game.Players.LocalPlayer.Character.Humanoid.Health) < 1 or tonumber(getgenv().target.Character.Humanoid.Health) < 1 or _G.firstexec then 
+        if not _G.debounce.Target then 
+              _G.debounce.Target = true
+            repeat wait() until tonumber(game.Players.LocalPlayer.Character:WaitForChild('Humanoid').Health) > 0 
+            if getgenv().target.Character then 
+                table.insert(getgenv().killed, getgenv().target ) 
+            end 
+            log('Killed: '.. getgenv().target.Name)
+            _G.firstexec = false
+            print('c') 
+              repeat wait() 
+                getgenv().target = getNearestTarget ()
+              until getgenv().target.Character
+              bighitbox(getgenv().target)
+            Notification.new("info", "Akatsuki Community", getgenv().target.Name)
+            repeat wait() until tonumber(game.Players.LocalPlayer.Character.Humanoid.Health) > 0 
+        _G.debounce.Target = false 
+        end
+        
+        end 
+    end 
+end)
+
+
+--main hunt 
+game:GetService"RunService".RenderStepped:Connect(function() 
+        wait(1)
+        if getgenv().target and getgenv().target.Character and getgenv().target.Character:WaitForChild('HumanoidRootPart') then 
+           
+            local pcframe = getpcframe(getgenv().target)
+            if pcframe then
+                wait() 
+                topos(pcframe)
+          end
+        end 
+      end)
+spawn(function() 
+ 
+
+             while getgenv().target and getgenv().target.Character and (getgenv().target.Character.HumanoidRootPart.CFrame.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position).Magnitude < 60 and _G.hunt do
+  wait()               
+                 
+                 
+spam()
+
+             end
+
+           end)
+  end )
+
+-- sv hop xd
+      spawn(function()
+while _G.hunt and wait() do
+if #getgenv().killed > 8 or #getgenv().killed >= #game.Players:GetPlayers() or getgenv().script == false then 
+        if getgenv().script == false then 
+          Notification:new("info", "Akatsuki", 'Have Error, Hopping')
+print(err)
+
+wait(10)
+        end
+Hop()
+while wait() do 
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.X, 255500, game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Z) 
+        end
+end
+end
 end)
   
-hb:Connect(function()
- spawn(function ()
-  print(debou)
-  if debou then 
-   print(getgenv().targ.Name)
-   to(getgenv().targ.Character.HumanoidRootPart.CFrame + p.Position)
-  end 
- end)
- end)
