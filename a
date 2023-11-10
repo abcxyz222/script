@@ -135,6 +135,22 @@ function Tween(P1)
     end
 end
 
+function EquipTool(Tool)
+    pcall(function()
+        game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack[Tool])
+    end)
+end
+
+function EquipWeapon(ToolSe)
+    if not _G.NotAutoEquip then
+        if game.Players.LocalPlayer.Backpack:FindFirstChild(ToolSe) then
+            Tool = game.Players.LocalPlayer.Backpack:FindFirstChild(ToolSe)
+            wait(.1)
+            game.Players.LocalPlayer.Character.Humanoid:EquipTool(Tool)
+        end
+    end
+end
+
 Main:AddToggle({
     Name = "Fame level",
     Default = false,
@@ -157,7 +173,7 @@ task.spawn(function()
                                             if "Defeat "..v.Name.." (0/1)"==game.Players.LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.text then
                                                 repeat task.wait()
                                                     BusoHaki()
-                                                    equip(_G.SelectWeapon)
+                                                    EquipWeapon(_G.SelectWeapon)
                                                     keydown("T")
                                                     keydown("Y")
                                                     task.spawn(function()
@@ -206,23 +222,23 @@ task.spawn(function()
                                                     end)
                                                     spawn(function()
                                                         if posrandom <= 1 then
-                                                            Tween(P1)(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame * CFrame.new(0,Distance_Farm,5))
+                                                            Tween(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame * CFrame.new(0,Distance_Farm,5))
                                                             posrandom = posrandom + 0.1
                                                             UesFast=false
                                                         elseif posrandom >= 1 and posrandom <= 2 then
-                                                            Tween(P1)(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame * CFrame.new(5,Distance_Farm,0))
+                                                            Tween(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame * CFrame.new(5,Distance_Farm,0))
                                                             posrandom = posrandom + 0.1
                                                             UesFast=true
                                                         elseif posrandom >= 2 and posrandom <= 3 then
-                                                            Tween(P1)(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame *CFrame.new(0,Distance_Farm,-5))
+                                                            Tween(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame *CFrame.new(0,Distance_Farm,-5))
                                                             posrandom = posrandom + 0.1
                                                             UesFast=false
                                                         elseif posrandom >= 3 and posrandom <= 4  then
-                                                            Tween(P1)(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame * CFrame.new(-5,Distance_Farm,0))
+                                                            Tween(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame * CFrame.new(-5,Distance_Farm,0))
                                                             posrandom = posrandom + 0.1
                                                             UesFast=true
                                                         elseif posrandom >=4 and posrandom <= 5 then
-                                                            Tween(P1)(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame * CFrame.new(0,5,0))
+                                                            Tween(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame * CFrame.new(0,5,0))
                                                             posrandom = 0
                                                             UesFast=false
                                                         end
