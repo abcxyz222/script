@@ -134,15 +134,6 @@ function Tween(P1)
             }):Cancel()
     end
 end
-function CancelTween(target)
-    if not target then
-        _G.StopTween = true
-        wait()
-        Tween(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
-        wait()
-        _G.StopTween = false
-    end
-end
 
 Main:AddToggle({
     Name = "Fame level",
@@ -215,23 +206,23 @@ task.spawn(function()
                                                     end)
                                                     spawn(function()
                                                         if posrandom <= 1 then
-                                                            Tween(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame * CFrame.new(0,Distance_Farm,5))
+                                                            Tween(P1)(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame * CFrame.new(0,Distance_Farm,5))
                                                             posrandom = posrandom + 0.1
                                                             UesFast=false
                                                         elseif posrandom >= 1 and posrandom <= 2 then
-                                                            Tween(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame * CFrame.new(5,Distance_Farm,0))
+                                                            Tween(P1)(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame * CFrame.new(5,Distance_Farm,0))
                                                             posrandom = posrandom + 0.1
                                                             UesFast=true
                                                         elseif posrandom >= 2 and posrandom <= 3 then
-                                                            Tween(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame *CFrame.new(0,Distance_Farm,-5))
+                                                            Tween(P1)(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame *CFrame.new(0,Distance_Farm,-5))
                                                             posrandom = posrandom + 0.1
                                                             UesFast=false
                                                         elseif posrandom >= 3 and posrandom <= 4  then
-                                                            Tween(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame * CFrame.new(-5,Distance_Farm,0))
+                                                            Tween(P1)(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame * CFrame.new(-5,Distance_Farm,0))
                                                             posrandom = posrandom + 0.1
                                                             UesFast=true
                                                         elseif posrandom >=4 and posrandom <= 5 then
-                                                            Tween(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame * CFrame.new(0,5,0))
+                                                            Tween(P1)(game:GetService("Players")[v.Name].Character.HumanoidRootPart.CFrame * CFrame.new(0,5,0))
                                                             posrandom = 0
                                                             UesFast=false
                                                         end
