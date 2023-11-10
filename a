@@ -174,8 +174,6 @@ task.spawn(function()
                                                 repeat task.wait()
                                                     BusoHaki()
                                                     EquipWeapon(_G.SelectWeapon)
-                                                    keydown("T")
-                                                    keydown("Y")
                                                     task.spawn(function()
                                                         while task.wait() do
                                                             if AutoFarmLevel then
