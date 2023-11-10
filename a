@@ -81,7 +81,7 @@ spawn(function()
 end)
 --// Fast Attack
 local AttackList = { "Super Fast", "Fast", "Normal" }
-_G.FastAttackDelay = "MOBILE"
+_G.FastAttackDelay = "Normal"
 Main:AddDropdown({
     Name = "Fast Attack",
     Default = "",
