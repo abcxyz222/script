@@ -1,50 +1,129 @@
--- NORMAL VERSION
-repeat wait() until game:IsLoaded()
-_G["Fumo Blox Fruit - HoHo Hub Kaitun V3"] = {
-    MAIN_UI_COLOR = Color3.fromRGB(255, 165, 0), -- Color3.fromRGB(170, 85, 255)
-    
-    BlackScreen = false, -- less lag
-    FastMode = true, -- true/false less lag
-    AutoRejoinGame = 1000, -- time in second, rejoin to bypass anticheat
-    GetFruitInWorld = true, -- true/false collect fruit
-    AutoTeam = "Pirate", -- Pirate/Marine
-    GetMelees = {"Superhuman", "Death Step","Sharkman Karate","Electric Claw","Dargon Talon", "Godhuman"}, -- remove if u dont wanna get what melee
-    Redeem_X2EXP_on = 10, -- to redeem all x2 exp code on what level
-    Character_Config = {
-        InvisFromKen = true, -- true/false anyone use ken cant see your name
-        NoStun = true, -- true/false make u dont get stuned when farming
+getgenv().Key = 'f63d01eb00cb76606e9dbb9e'
+repeat wait()
+until game:IsLoaded()
+wait()
+spawn(function()
+    while wait() do 
+        pcall(function()
+            game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(TableChat[math.random(1,#TableChat)],"All")
+            wait(45)
+        end)
+    end
+end)
+getgenv().Setting = {
+    ["Team"] = "Pirates", --Marines,Pirates
+    ["Webhook"] = {
+        ["Enabled"] = true,
+        ["Url Webhook"] = "https://discord.com/api/webhooks/1169283765600784437/YuRb82sarDsaDqFWUcDTWegAR0Yrq168SzMAmynQfgN06ja3-lzj43gsGw7iTipZ25dF", --Your Url
     },
-    ListFruitTake = {
-        "Ice-Ice","Light-Light","Spider-Spider",'Magma-Magma','Flame-Flame','Rumble-Rumble','Dark-Dark','Quake-Quake','Buddha-Buddha',
-        -- put fruit you want like above, recommend fruit can awake
-        -- fruit list: 'Sand-Sand','Smoke-Smoke','Ice-Ice','Kilo-Kilo','Diamond-Diamond','Light-Light','Shadow-Shadow','Portal-Portal','Spider-Spider','Gravity-Gravity','Spin-Spin','Paw-Paw','Revive-Revive','Bird-Bird: Phoenix','Rubber-Rubber','Spring-Spring','Blizzard-Blizzard','Dough-Dough','Bomb-Bomb','Venom-Venom','Bird-Bird: Falcon','Spirit-Spirit','Love-Love','Leopard-Leopard','Dragon-Dragon','Spike-Spike','Magma-Magma','Control-Control','Flame-Flame','Rumble-Rumble','Dark-Dark','Chop-Chop','Quake-Quake','Buddha-Buddha','Barrier-Barrier'
+    ["Misc"] = {
+        ["AutoBuyRandomandStoreFruit"] = true,
+        ["AutoBuySurprise"] = true,
     },
-    BuyBetterFruit = true, --true/false if u alr have fruit but better fruit stock it will buy it
-    EatFruitWhenSea3 = true, --true/false we need to keep fruit before third sea
-    AwakeFruit = true, --true/false awake after a raid
-    AutoBuy = {
-        Shop_Items = true, --true/false auto buy all item sell with beli like Bisento,... we will buy when max level
-        All_Haki = true, --true/false ken,buso,geppo,soru we will buy this in first
-        Legendary_Swords = true, -- true/false buy all leg sword
-        Ectoplasm_Items = true, -- true/false buy all ecto items
+    ["Click"] = {
+        ["Enable"] = true,
+        ["Click Gun"] = true,
+        ["OnLowHealthDisable"] = true,
+        ["LowHealth"] = 4500,
     },
-    AutoItems = {
-        ["Second Sea"] = {"Acidum Rifle"},
-        ["Third Sea"] = {"Cursed Dual Katana","Soul Guitar","Rainbow Haki","Hallow Scythe","Tushita","Yama","AutoElite","AutoRipIndra"},
-        --remove rainbow haki or any thing if u dont want
+    ["SafeZone"] = {
+        ["Enable"] = true,
+        ["LowHealth"] = 4500,
+        ["MaxHealth"] = 5000,
+        ["Teleport Y"] = math.random(1000,2500)
     },
-    Deep_Config = {
-        -- Delay go to Third Sea
-        ["Ectoplasm Farm"] = {
-            Enabled = true, --true/false enabled is needable if u want Soul Guitar
-            FarmUntil = 250, -- 250 = soul guitar price
+    ["Race V4"] = {
+        ["Enable"] = true,
+    },
+    ["Invisible"] = false,
+    ["White Screen"] = false,
+    ["GunMethod"] = false, --Support Only Melee And Gun,Not Invisible, Turn On Enabled Gun and Melee Please
+    ["SpamSkill"] = false, -- Will use all skills as fast as possbile ignore holding skills
+    ["Weapons"] = {
+        ["Melee"] = {
+            ["Enable"] = true,
+            ["Delay"] = 1,
+            ["Skills"] = {
+                ["Z"] = {
+                    ["Enable"] = true,
+                    ["HoldTime"] = 0,
+                },
+               [ "X"] = {
+                    ["Enable"] = true,
+                    ["HoldTime"] = 0.5,
+                },
+
+                ["C"] = {
+                    ["Enable"] = true,
+                    ["HoldTime"] = 1,
+                },
+            },
         },
-        ["Dark Beard Drop Farm"] = false, -- enabled this if u want 100% get Soul Guitar
-        ["Full 3 Leg Sword and True Triple Katana"] = false, -- enabled this if u want 100% get true triple katana
-    },
-    HopServerFarm = true, -- true/false why not?
-    StopRaidWhenGetEnoughFrag = 10000, --10k is enough so we will farm faster
-    PVP_FARM = true, -- kill player grind exp fast
-    ShowAccountInfo = true, -- an ui with your account information
+        ["Blox Fruit"] = {
+            ["Enable"] = false,
+            ["Delay"] = 1,
+            ["Skills"] = {
+                ["Z"] = {
+                    ["Enable"] = false,
+                    ["HoldTime"] = 0,
+                },
+                ["X"] = {
+                    ["Enable"] = true,
+                    ["HoldTime"] = 0,
+                },
+
+                ["C"] = {
+                    ["Enable"] = true,
+                    ["HoldTime"] = 0,
+                },
+                ["V"] = {
+                    ["Enable"] = true,
+                    ["HoldTime"] = 0,
+                },
+                ["F"] = {
+                    ["Enable"] = false,
+                    ["HoldTime"] = 0,
+                },
+            },
+        },
+        ["Gun"] = {
+            ["Enable"] = false,
+            ["Delay"] = 0.98,
+            ["Skills"] = {
+                ["Z"] = {
+                    ["Enable"] = false,
+                    ["HoldTime"] = 0.7,
+                },
+                ["X"] = {
+                    ["Enable"] = true,
+                    ["HoldTime"] = 0.7,
+                },
+            },
+        },
+        ["Sword"] = {
+            ["Enable"] = true,
+            ["Delay"] = 1,
+            ["Skills"] = {
+                ["Z"] = {
+                    ["Enable"] = true,
+                    ["HoldTime"] = 1.5,
+                },
+                ["X"] = {
+                    ["Enable"] = true,
+                    ["HoldTime"] = 0.5,
+                },
+            },
+        },
+    }
 }
-loadstring(game:HttpGet('https://raw.githubusercontent.com/acsu123/HohoV2/main/ScriptLoad.lua'))()
+repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
+spawn(function()
+    while wait() do
+            game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(child)
+                if child.Name == 'ErrorPrompt' and child:FindFirstChild('MessageArea') and child.MessageArea:FindFirstChild("ErrorFrame") then
+                    game:GetService("TeleportService"):Teleport(game.PlaceId)
+                end
+            end)
+        end
+    end)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/obiiyeuem/vthangsitink/main/BountyShit.lua"))() 
