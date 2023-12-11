@@ -38,7 +38,7 @@ getgenv().Setting = {
         ["Enable"] = true,
     },
     ["Invisible"] = false,
-    ["White Screen"]  = false, -- Bật cho bớt lag hoặc không để điều khiển
+    ["White Screen"]  = true, -- Bật cho bớt lag hoặc không để điều khiển
     ["GunMethod"] = true, -- Dùng cho melee và gun
     ["SpamSkill"] = false, -- Sử dụng tất cả skill
     ["Weapons"] = {
