@@ -16,7 +16,7 @@ getgenv().DitBF = {
             ["[Farm] Server Hop if Player nearby"] = true,
             ["[Sea 3 Quest] Server Hop for 1M+ Blox Fruit"] = true,
         },
-        ["Delay"] = 60,
+        ["Delay"] = 120,
     },
     ["Do Action"] = {
         ["Get Godhuman"] = true,
