@@ -66,13 +66,12 @@ _G.Settings_Melee = { -- หมัดที่จะทำ
     ['Godhuman'] = true
 }
 _G.FarmMastery_Settings = {
-    ['Melee'] = true,
-    ['Sword'] = true,
-    ['DevilFruits'] = true,
+    ['Melee'] = false,
+    ['Sword'] = false,
+    ['DevilFruits'] = false,
     ['Select_Swords'] = {
-        ["AutoSettings"] = true, -- ถ้าเปิดอันนี้มันจะเลือกดาบให้เองหรือฟาร์มทุกดาบนั่นเอง
+        ["AutoSettings"] = false, -- ถ้าเปิดอันนี้มันจะเลือกดาบให้เองหรือฟาร์มทุกดาบนั่นเอง
         ["ManualSettings"] = { -- ถ้าปรับ AutoSettings เป็น false มันจะฟาร์มดาบที่เลือกตรงนี้ ตัวอย่างข้างล่าง
-            "Cursed Dual Katana"
         }
     }
 }
