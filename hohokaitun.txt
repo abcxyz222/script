@@ -13,7 +13,7 @@ getgenv().DitBF = {
     ["Hop Server"] = {
         ["Type"] = {
             ["[Main] Server Hop"] = true,
-            ["[Farm] Server Hop if Player nearby"] = true,
+            ["[Farm] Server Hop if Player nearby"] = false,
             ["[Sea 3 Quest] Server Hop for 1M+ Blox Fruit"] = true,
         },
         ["Delay"] = 60,
