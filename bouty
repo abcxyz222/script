@@ -23,7 +23,7 @@ getgenv().Setting = {
         Enable = true,
         Mode = "Lite",--Lite: Just Lower Graphics, Full: Completely Make All Objects Transparent
     },
-    ["Hide Theme"] = true,
+    ["Hide Theme"] = false,
     ["3D Render Disable"] = true,
     ["Theme"] = {
         ["Name"] = "Raiden",--"Old", "Raiden","Ayaka","Hutao","Yelan","Miko","Nahida","Ganyu","Keqing","Nilou","Barbara","Zhongli","Layla"
