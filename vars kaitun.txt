@@ -1,5 +1,6 @@
 repeat wait()
 until game:IsLoaded()
+local TableChat = {"Banana On Top","Config By #Hkoaa"}
 spawn(function()
     while wait() do 
         pcall(function()
@@ -20,7 +21,7 @@ getgenv().Setting = {
     },
     ["Click"] = {
         ["Enable"] = true,
-        ["Click Gun"] = false,
+        ["Click Gun"] = true,
         ["OnLowHealthDisable"] = true,
         ["LowHealth"] = 4500,
     },
