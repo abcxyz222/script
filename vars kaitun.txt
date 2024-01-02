@@ -20,7 +20,7 @@ getgenv().Setting = {
     },
     ["Click"] = {
         ["Enable"] = true,
-        ["Click Gun"] = true,
+        ["Click Gun"] = false,
         ["OnLowHealthDisable"] = true,
         ["LowHealth"] = 4500,
     },
