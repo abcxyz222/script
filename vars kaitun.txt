@@ -178,7 +178,7 @@ getgenv().Setting = {
 
                 ["C"] = {
                     ["Enable"] = true,
-                    ["HoldTime"] = 0,
+                    ["HoldTime"] = 0.2,
                     ["TimeToNextSkill"] = 0,
                 },
                 ["V"] = {
