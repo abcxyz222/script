@@ -4,7 +4,7 @@ end
 --Put Your Key Between ""
 script_key="QrtlqfZOwZfFvdJMylcahoLDMzLfsZZi";
 DelayTime = 300
-getgenv().FpsBoost = true
+getgenv().FpsBoost = false
 getgenv().Setting = {
     ["Team"] = "Pirates", --Marines
     ["Webhook"] = {
