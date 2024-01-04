@@ -104,7 +104,7 @@ getgenv().Setting = {
     },
     ["FpsLock"] = {
         ["Enable"] = true,
-        ["Cap"] = 30,
+        ["Cap"] = 60,
     },
     ["LockBounty"] = {
         ["Enable"] = true,
