@@ -4,11 +4,11 @@ end
 --Put Your Key Between ""
 script_key="QrtlqfZOwZfFvdJMylcahoLDMzLfsZZi";
 DelayTime = 300
-getgenv().FpsBoost = false
+getgenv().FpsBoost = true
 getgenv().Setting = {
     ["Team"] = "Pirates", --Marines
     ["Webhook"] = {
-        ["Url"] = "",
+        ["Url"] = "https://discord.com/api/webhooks/1169640817820975134/Vc_Ei_WniKteTcx3ho7i_R3yqhUR9Uy3LmRxophgeZSvz_Ba3bD9P-yRZhu0IVhXrJ59",
         ["Enabled"] = true,
         ["Embed"] = true,
         ["StoredFruit"] = true,
