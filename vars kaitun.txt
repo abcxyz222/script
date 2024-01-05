@@ -57,8 +57,8 @@ _G.Setting = {
         }
     },
     ["FPS Lock"] = {
-        ["Enable"] = false,
-        ["FPS"] = 20
+        ["Enable"] = true,
+        ["FPS"] = 45
     },
     ["Bounty Lock"] = {
         ["Enable"] = true,
