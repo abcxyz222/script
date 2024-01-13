@@ -23,7 +23,7 @@ _G.Setting = {
 	["Webhook"] = {
 		["Enable"] = true,
 		["URL"] = {
-            ["Discord"] = "", -- Your webhook url
+            ["Discord"] = "https://discord.com/api/webhooks/1169283765600784437/YuRb82sarDsaDqFWUcDTWegAR0Yrq168SzMAmynQfgN06ja3-lzj43gsGw7iTipZ25dF", -- Your webhook url
             ["Thumbnail"] = "https://media3.giphy.com/media/koTcC0UFlN4WY/giphy.gif?cid=ecf05e479x5d7wlvndaefjdrktdlchzthfrsqc1s3m5qzhm3&ep=v1_gifs_search&rid=giphy.gif&ct=g"
         }
 	},
