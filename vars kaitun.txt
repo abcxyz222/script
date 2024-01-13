@@ -2,7 +2,7 @@ script_key="mwyclnCdLxkUmkTsAKNRZcWAsncCNpFx";
 
 
 _G.Team = "Pirates";
-_G.FpsBoost = false;
+_G.FpsBoost = true;
 _G.Setting = {
 	["settings"] = {
 	    ["Ken Haki"] = true,
