@@ -103,7 +103,7 @@ getgenv().Setting = {
         ["EveryBounty"] = 10000,
     },
     ["FpsLock"] = {
-        ["Enable"] = true,
+        ["Enable"] = false,
         ["Cap"] = 30,
     },
     ["LockBounty"] = {
