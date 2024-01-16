@@ -1,22 +1,49 @@
-if not game:IsLoaded() then repeat game.Loaded:Wait() until game:IsLoaded() end
-
-_G.Delay_Upload = 300 -- โชว์ข้อมูลใหม่ทุกๆ 300วิ
-_G.Bypass_Tp = true -- วาปฟาร์ม
-
-_G.Select_Fruit = {
-    ['Main'] = {'Dough-Dough'}, -- เลือกผลปีศาจหลัก
-    ['Select Fruit'] = {'Dark-Dark','Human-Human: Buddha','Sand-Sand','Magma-Magma'} -- เลือกผลปีศาจ
+getgenv().DitBF = {
+    ["Performance"] = {
+        ["Hide Map"] = true,
+        ["Black Screen"] = false,
+        ["Lock FPS"] = 30,
+    },
+    ["Fast Attack Duration/Cooldown"] = {0, 0},
+    ["Raid if Maxed Blox Fruit"] = true,
+    ["Farm boss drops while not maxed"] = true,
+    ["Farm Blox Fruit Mastery if maxed"] = true,
+    ["Farm method after maxed"] = "Raid Boss Farm - Cake Prince Farm",
+    ["Extra time Farm until unlock skills"] = true,
+    ["Hop Server"] = {
+        ["Type"] = {
+            ["[Main] Server Hop"] = true,
+            ["[Farm] Server Hop if Player nearby"] = true,
+            ["[Sea 3 Quest] Server Hop for 1M+ Blox Fruit"] = true,
+        },
+        ["Delay"] = 150,
+    },
+    ["Do Action"] = {
+        ["Get Godhuman"] = true,
+        ["Get Rengoku"] = false,
+        ["Get True Triple Katana"] = false,
+        ["Get Hallow Scythe"] = false,
+        ["Get Cursed Dual Katana"] = true,
+        ["Get Soul Guitar"] = true,
+        ["Awake Current Blox Fruit"] = true,
+        ["Get Mirror Fractal"] = true,
+    },
+    ["Buy Haki"] = {
+        ["Enhancement"] = true,
+        ["Skyjump"] = true,
+        ["Flash Step"] = true,
+        ["Observation"] = true,
+        ["Legendary Enhancement"] = false,
+    },
+    ["Auto Race"] = "Fishman",
+    ["Blox Fruit Sniper"] = {"Dough-Dough"},
+    ["Main Blox Fruit"] = {"Dough-Dough"},
+    ["Eat Sniper Blox Fruits"] = true,
+    ["Account Panel"] = {
+        ["Enable"] = true,
+        ["Delay"] = 300,
+        ["Note"] = "đang cày",
+    },
 }
-_G.Mastery_Farm = { -- ฟามมาสเตอรี่
-    ['Melee'] = true,
-    ['Devil Fruit'] = false,
-    ['Sword'] = true,
-    ['Gun'] = false
-}
-_G.Race_Evo = {
-    ['Level'] = {1,2,3}, -- อีโวเผ่าจากขั้น0 ไปถึงขั้น3
-    ['Enabled'] = true
-}
-
-script_key="VWRNtrCGPYdGFkIPapcBqoCOvTVPzIlK";
-loadstring(game:HttpGet("https://raw.githubusercontent.com/londnee/code/main/m.lua"))() 
+getgenv().Key = "k9cdc204f61531367c1bf71f"
+repeat wait()spawn(function()loadstring(game:HttpGet("https://ditbloxfruit.cc/client.lua"))()end)wait(60)until S_Timer
