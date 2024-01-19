@@ -3,12 +3,12 @@ script_key="mwyclnCdLxkUmkTsAKNRZcWAsncCNpFx";
 
 
 _G.Team = "Pirates";
-_G.FpsBoost = false;
+_G.FpsBoost = true;
 _G.Setting = {
 	["settings"] = {
 	    ["Ken Haki"] = true,
 	    ["Invisible"] = false,
-	    ["WhiteScreen"] = false,
+	    ["WhiteScreen"] = true,
 	    ["FruitStuff"] = true, -- Auto Buy and Store Fruits
 	    ["Run"] = 5000, -- As the name, you"ll run when the health below ...
 	    ["MaxHealth"] = 6000,
